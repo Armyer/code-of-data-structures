@@ -14,6 +14,12 @@
 *8. Empty(L) 判断是否为空
 *9. DestroyList(&L) 销毁操作
 *
+*
+*在传参时，要注意如果要修改线性表的值，需要传入指针，方可修改对应地址的值，否则结束函数，值不变
+*而如果只是获得线性表的值，则只需将线性表传入，对应进行操作即可
+*
+*
+*
 */
 
 #define InitSize 100  //线性表初始化长度
@@ -60,13 +66,13 @@ int Length(SqList L)
 }
 
 /**
- * 按值查找函数
- * 前置条件：线性表已经存在
- * 输入：线性表L，数据元素X
- * 功能：按值查找，在线性表中查找值等于X的元素
- * 输出：如果查找成功，返回元素X在表中序号，否则返回-1
- *
- */
+* 按值查找函数
+* 前置条件：线性表已经存在
+* 输入：线性表L，数据元素X
+* 功能：按值查找，在线性表中查找值等于X的元素
+* 输出：如果查找成功，返回元素X在表中序号，否则返回-1
+*
+*/
 int LocateElem(SqList L, ElemType X)
 {
     int i = 0;
@@ -81,14 +87,14 @@ int LocateElem(SqList L, ElemType X)
 }
 
 /**
- * 按位查找函数
- * 前置条件：线性表存在
- * 输入：线性表L，元素的序号i
- * 功能：按位查找，获取线性表中第i个元素的值
- * 输出：如果序号合法，返回序号位i的值，否则返回-1
- * 后置条件：线性表不变
- *
- */
+* 按位查找函数
+* 前置条件：线性表存在
+* 输入：线性表L，元素的序号i
+* 功能：按位查找，获取线性表中第i个元素的值
+* 输出：如果序号合法，返回序号位i的值，否则返回-1
+* 后置条件：线性表不变
+*
+*/
 ElemType GetElem(SqList L, ElemType i)
 {
     if(i<0 || i>L.length)
@@ -100,68 +106,130 @@ ElemType GetElem(SqList L, ElemType i)
         return L.data[i];
     }
 
-
 }
 
 
 
+/**
+ * 前置条件：线性表已存在
+ * 输入：线性表L
+ * 功能：便利线性表的各个数据元素
+ * 输出：打印线性表的各个数据元素
+ * 后置条件：线性表不变
+ *
+ */
+void PrintList(SqList L)
+{
+    int i ;
+    for(i = 0;i < L.length;i++)
+    {
+        printf("i=%d ,data=%d\n",i,L.data[i]);
+    }
+}
+/**
+* 插入操作函数
+* 前置条件：线性表已存在
+* 输入：线性表L，插入位置i,插入元素e
+* 功能：插入操作，在线性表的第i个元素位置出插入一个新元素e
+* 输出：若插入不成功，返回-1，成功返回1
+* 后置条件：若插入成功，线性表增加一个元素
+*
+*/
+int ListInsert(SqList *L, int i,ElemType e)
+{
+    if(i<1 || i>L->length+1)    //判断i的有效性
+    {
+        return -1;
+    }
+    if(L->length >= MaxSize) //判断存储空间已满，不能插入
+    {
+        return -1;
+    }
+    int j;
+    for(j = L->length; j>=i;j--)  //将第i个元素及之后的元素后移
+    {
+        L->data[j] = L->data[j-1];  
+
+    }
+    
+    L->data[i-1] = e;
+    printf("l.data[%d]=%d\n",i-1,L->data[i-1]);
+    L->length++;
+  
+    return 1;
+}
+
+
+
+
+
+/**
+ * 判断是否为空线性表
+ * 前置条件：线性表已存在
+ * 输入：线性表
+ * 功能：判空操作，判断线性表是否位空表
+ * 输出：若是空表，返回1，否则返回0
+ * 后置条件：线性表不变
+ *
+ */
+int Empty(SqList L)
+{
+    if(L.length == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/**
+ *
+ *
+ *
+ *
+ *
+ */
+
+
+/**
+*测试代码
+*
+*/
+void test()
+{
+}
 
 int main()
 {
 
 
-    SqList l;
-    InitList(&l);
+    SqList L;
+   
+    InitList(&L);
     
-    int le = Length(l);
-    
-    printf("length is %d \n",le);
-
     int i;
-    for(i=0;i<50;i++)
+    for(i = 0;i<10;i++)
     {
-        l.data[i]=i;
-        l.length ++ ;
+        L.data[i] = i;
+        L.length++;
     }
-    int k = LocateElem(l,10);
-    printf("i is %d\n",k);
 
-    int getElem = GetElem(l,5);
-    printf("get is %d\n",getElem);
+    
 
-    return 0;
+    PrintList(L);
+
+    ListInsert(&L, 3,100);
+
+    PrintList(L);
+
+
+   int l =  LocateElem(L,100);
+
+   int g =  GetElem(L,2);
+
+
+   printf("l=%d,g=%d\n",l,g);
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
