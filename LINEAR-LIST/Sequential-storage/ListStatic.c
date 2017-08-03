@@ -1,3 +1,9 @@
+/*************************************************************************
+	> File Name: ListStatic.c
+	> Author: Armyer
+	> Mail: 79288428jj@gmail.com
+	> Created Time: 2017年08月03日 星期四 17时18分29秒
+ ************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,7 +19,6 @@
 *7. PrintList(L)  输出
 *8. Empty(L) 判断是否为空
 *9. DestroyList(&L) 销毁操作
-*
 *
 *在传参时，要注意如果要修改线性表的值，需要传入指针，方可修改对应地址的值，否则结束函数，值不变
 *而如果只是获得线性表的值，则只需将线性表传入，对应进行操作即可
@@ -111,13 +116,13 @@ ElemType GetElem(SqList L, ElemType i)
 
 
 /**
- * 前置条件：线性表已存在
- * 输入：线性表L
- * 功能：便利线性表的各个数据元素
- * 输出：打印线性表的各个数据元素
- * 后置条件：线性表不变
- *
- */
+* 前置条件：线性表已存在
+* 输入：线性表L
+* 功能：便利线性表的各个数据元素
+* 输出：打印线性表的各个数据元素
+* 后置条件：线性表不变
+*
+*/
 void PrintList(SqList L)
 {
     int i ;
@@ -151,11 +156,9 @@ int ListInsert(SqList *L, int i,ElemType e)
         L->data[j] = L->data[j-1];  
 
     }
-    
+
     L->data[i-1] = e;
-    printf("l.data[%d]=%d\n",i-1,L->data[i-1]);
     L->length++;
-  
     return 1;
 }
 
@@ -164,14 +167,14 @@ int ListInsert(SqList *L, int i,ElemType e)
 
 
 /**
- * 判断是否为空线性表
- * 前置条件：线性表已存在
- * 输入：线性表
- * 功能：判空操作，判断线性表是否位空表
- * 输出：若是空表，返回1，否则返回0
- * 后置条件：线性表不变
- *
- */
+* 判断是否为空线性表
+* 前置条件：线性表已存在
+* 输入：线性表
+* 功能：判空操作，判断线性表是否位空表
+* 输出：若是空表，返回1，否则返回0
+* 后置条件：线性表不变
+*
+*/
 int Empty(SqList L)
 {
     if(L.length == 0)
@@ -185,12 +188,45 @@ int Empty(SqList L)
 }
 
 /**
- *
- *
- *
- *
- *
- */
+* 删除操作
+* 前置条件：线性表已存在
+* 输入：删除位置i
+* 功能：删除操作，删除线性表中的第i个元素
+* 输出：若删除成功，返回1，否则抛出异常
+* 后置条件：若删除成功，表中减少一个元素
+*
+*/
+ElemType ListDelete(SqList *L, int i, ElemType *e)
+{
+    if(i<0 || i>L->length)
+    {
+        perror("error");
+    }
+
+    *e = L->data[i-1];
+
+    for(; i<L->length;i++) //将线性表i以后的元素前移一个位置
+    {
+        L->data[i-1] = L->data[i];
+    }
+    L->length --;      //线性表长度减1
+    return 1;
+
+}
+
+
+/**
+* 销毁线性表
+* 前置条件：线性表已存在
+* 输入：无
+* 功能：销毁线性表
+* 输出：无
+* 后置条件：释放线性表所占用的存储空间
+*/
+void DestroyList(SqList *L)
+{
+    L->length = 0;
+}
 
 
 /**
@@ -206,9 +242,11 @@ int main()
 
 
     SqList L;
-   
+
+    //初始化线性表
     InitList(&L);
-    
+
+    //线性表初始化赋值
     int i;
     for(i = 0;i<10;i++)
     {
@@ -216,20 +254,26 @@ int main()
         L.length++;
     }
 
-    
-
+    //测试打印函数
     PrintList(L);
 
+    //测试插入函数
     ListInsert(&L, 3,100);
-
     PrintList(L);
 
+    //测试按值查找和按位查找函数
+    int l =  LocateElem(L,100);
+    int g =  GetElem(L,2);
+    printf("l=%d,g=%d\n",l,g);
 
-   int l =  LocateElem(L,100);
+    //测试删除函数
+    int d;
+    ListDelete(&L, 2, &d);
+    printf("d = %d\n", d);
+    PrintList(L);
 
-   int g =  GetElem(L,2);
-
-
-   printf("l=%d,g=%d\n",l,g);
+    //测试销毁函数
+    DestroyList(&L);
+    PrintList(L);
 
 }
