@@ -34,17 +34,12 @@ typedef struct DNode
  *
  */
 DNode* CreateList(int n)
-{
-    DNode*  L;
-    DNode* r;
+
+    DNode* L;
 
     L = (DNode*)malloc(sizeof(DNode));
 
-    r = L;
-
-    L->data = 0;
     L->next=NULL;   //头结点
-    L->prior=NULL;   
 
     DNode* p;      //新建结点
 
@@ -53,18 +48,27 @@ DNode* CreateList(int n)
     for(i = n;i>0;i--)
     {
         p = (DNode*)malloc(sizeof(DNode)); //分配内存
-        
+
         scanf("%d",&x);   //输入数据
+
         p->data = x;
 
-        L->next = p;     //牢记先断后链
-        p->prior = L;
-        p->next=NULL;
-        L = p;
+        p->next = L->next;
 
+        L->next->prior = s;
+
+        p->prior = L;
+
+        L->next = p;
+
+       // p = L->next;    //让头结点下一个结点指向新建结点
+
+       // p->prior = L;    //让p结点前驱指针指向前一个结点
+ 
+       // L = p;    //将头结点指向p结点
     }
 
-    return r;
+    return L;
 }
 
 
@@ -82,7 +86,7 @@ void PrintList(DNode* L)
 {
     if(L->next == NULL)
     {
-        perror("error!\n");
+        perror("over\n");
     }
 
     while(L->next!=NULL)
@@ -91,55 +95,6 @@ void PrintList(DNode* L)
         printf("%d\n",L->data);
 
     }
-}
-
-
-/**
- * 前置条件：线性表已存在
- * 输入：线性表头结点
- * 功能：求表长
- * 输出：表长
- * 后置条件：线性表不改变
- */
-int Length(DNode* L)
-{
-    int length = 0;
-    while(L->next!=NULL)
-    {
-        length++;
-        L = L->next;
-    }
-    return length;
-
-
-
-}
-
-
-/**
- * 前置条件：线性表已存在
- * 输入：线性表位置i，线性表头结点L
- * 功能：根据位置获得结点
- * 输出：结点
- * 后置条件：线性表不改变
- */
-DNode* GetELem(DNode* L,int i)
-{
-    if(i<0||i>Length(L))
-    {
-        perror("error i\n");
-        exit(-1);
-    }
-
-   // DNode* r;
-   // r = (DNode*)malloc(sizeof(DNode));
-
-    while(i--)
-    {
-        L = L->next;
-    }
-
-    return L;
 }
 
 
@@ -156,19 +111,9 @@ DNode* GetELem(DNode* L,int i)
  */
 void InsertList(DNode* L, int i, ElemType e)
 {
-
-    if(i<0||i>Length(L))
-    {
-        perror("error!\n");
-        exit(-1);
-    }
-
     DNode* s ;//将s结点插入p之后
-    
     s = (DNode*)malloc(sizeof(DNode));
-    
     s ->data = e;
-    
     DNode* p = L;
     s->next = p->next;
     p->next->prior = s;
@@ -188,14 +133,7 @@ int main()
 
     DNode* L = CreateList(3);
     PrintList(L);
-    int length = Length(L);
-    printf("length is %d\n",length);
 
-    DNode* r = GetELem(L,3);
-    printf("data is %d\n",r->data);
-
-    InsertList(L,2,10);
-    PrintList(L);
     return 0;
 
 

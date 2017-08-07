@@ -239,7 +239,7 @@ int main()
     int n = 5;
    //LNode* L = CreateList1(n);
     //初始化创建单链表
-    LNode *L = CreateList2(n);
+    LNode *L = CreateList1(n);
     PrintList(L);
     printf("\n");
 
